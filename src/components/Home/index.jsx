@@ -75,7 +75,7 @@ const HomePage = () => {
         <div className="absolute inset-0 z-10 items-center h-screen text-white w-72 xl:pt-32 xl:pl-10 bg-color-palette-1">
           <div className="flex flex-col gap-4">
             {menuItem.map((item) => (
-              <NavLink to={item.href}>
+              <NavLink to={item.href} onClick={toggleSideBar}>
                 {({ isActive }) => (
                   <>
                     {item.href === '/medical' ? (
