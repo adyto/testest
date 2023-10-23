@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar';
 import {
   Avatar2,
@@ -17,7 +17,7 @@ import {
   TimeIMG,
 } from '../../assets/images/img';
 import { LeftOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import Footer from '../Footer';
 // import DetailForm from './DetailForm';
 // import ContactForm from './ContactForm';
@@ -26,6 +26,8 @@ import { NavLink } from 'react-router-dom';
 
 const HomePage = () => {
   const { sideBar, toggleSideBar } = useStateContext();
+  const [visiblePopUp, setVisiblePopUp] = useState(false);
+  const [visiblePopUpTwo, setVisiblePopUpTwo] = useState(false);
   const menuItem = [
     {
       href: '/leave',
@@ -68,9 +70,101 @@ const HomePage = () => {
       name: 'Payslip',
     },
   ];
+  const [valueHandlePopUp, setValueHandlePopUp] = useState('');
   console.log(sideBar);
+  useEffect(() => {
+    setVisiblePopUp(true);
+    // let popStatus = localStorage.getItem('pop-status');
+    // if (!popStatus) {
+    //   setVisiblePopUp(true);
+    //   localStorage.setItem('pop-status', 1);
+    // }
+  }, []);
+  const popUpItems = [
+    {
+      tanggal: '1 Feb 2023',
+      value: 'Masa Pengisian KPI',
+    },
+    {
+      tanggal: '1 Feb 2023',
+      value: 'TOTAL AWARDS 2023',
+    },
+    {
+      tanggal: '1 Feb 2023',
+      value: 'Masa Pengisian KPI',
+    },
+    {
+      tanggal: '1 Feb 2023',
+      value: 'TOTAL AWARDS 2023',
+    },
+    {
+      tanggal: '1 Feb 2023',
+      value: 'Masa Pengisian KPI',
+    },
+  ];
+
+  const handleValuePopUp = (value) => {
+    console.log('222');
+    setVisiblePopUpTwo(true);
+    console.log(value);
+    setValueHandlePopUp(value);
+  };
+  // console.log(visiblePopUp);
+  console.log(valueHandlePopUp);
   return (
     <div className="relative">
+      {visiblePopUp && (
+        <Modal
+          title="Annoucments"
+          onCancel={() => setVisiblePopUp(false)}
+          open={visiblePopUp}
+          footer={[
+            <Button
+              key="back"
+              className="text-white bg-color-palette-1"
+              onClick={() => setVisiblePopUp(false)}
+            >
+              Close
+            </Button>,
+          ]}
+        >
+          <div className="flex flex-col gap-4">
+            {popUpItems.map((item) => (
+              <div className="font-bold">
+                {item.tanggal}
+                <span className="px-4">:</span>
+                <span
+                  className="text-blue-600 underline underline-offset-2"
+                  onClick={() => {
+                    setVisiblePopUp(false);
+                    handleValuePopUp(item.value);
+                  }}
+                >
+                  {item.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Modal>
+      )}
+      {visiblePopUpTwo && (
+        <Modal
+          title="Masa Pengisian KPI"
+          open={visiblePopUpTwo}
+          onCancel={() => setVisiblePopUpTwo(false)}
+          footer={[
+            <Button
+              key={'back'}
+              className="text-white bg-color-palette-1"
+              onClick={() => setVisiblePopUpTwo(false)}
+            >
+              Close
+            </Button>,
+          ]}
+        >
+          <p>ISI DETAIL DARI {valueHandlePopUp}</p>
+        </Modal>
+      )}
       {sideBar && (
         <div className="absolute inset-0 z-10 items-center h-screen text-white w-72 xl:pt-32 xl:pl-10 bg-color-palette-1">
           <div className="flex flex-col gap-4">
