@@ -1,15 +1,44 @@
 import React, { useState } from 'react';
 import { Logo, loginBanner } from '../../assets/images/img';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import AuthService from '../../services/AuthService';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
   const onSubmit = () => {
-    console.log(userId);
-    console.log(password);
+    AuthService.login(userId, password)
+      .then((res) => {
+        navigate('/');
+        message.success('Successfully Logged in!');
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('qqq');
+        console.log(err);
+        if (err.response.data.detail) {
+          message.error(err.response.data.detail);
+        } else {
+          if (
+            err.response.data.errors.Password &&
+            err.response.data.errors.UserId
+          ) {
+            message.warning(err.response.data.errors.Password);
+            message.warning(err.response.data.errors.UserId);
+          } else if (err.response.data.errors.Password) {
+            message.warning(err.response.data.errors.Password);
+          } else if (err.response.data.errors.UserId) {
+            message.warning(err.response.data.errors.UserId);
+          } else {
+            console.log(err);
+            // message.error(err.response.data.detail);
+          }
+        }
+      });
   };
   return (
     <div className="fixed flex flex-row justify-between h-full xl:mx-14 xl:my-9">
